@@ -1,4 +1,7 @@
 package org.example.dao;
 
-public interface TareaDAO {
+import org.example.entities.Tarea;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface TareaDAO extends JpaRepository<Tarea, Integer> {
 }
