@@ -1,11 +1,11 @@
 package org.example.entities;
 
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,7 +24,7 @@ public class SubTarea implements Serializable {
     private String nombre;
 
     @Column(name = "fecha_inicio")
-    private Date fecha_inicio;
+    private Date fechaInicio;
 
     @Column(name = "prioridad")
     private String prioridad;
@@ -38,7 +38,7 @@ public class SubTarea implements Serializable {
     @Column(name = "completada")
     private boolean completada;
 
-    @Column(name = "id_tarea")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tarea")
     private Tarea tarea;
-
 }

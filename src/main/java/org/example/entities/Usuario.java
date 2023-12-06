@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -26,6 +27,11 @@ public class Usuario implements Serializable{
     private String email;
 
     @Column(name = "contraseña")
-    private String contraseña;
+    private String pass;
 
+    @OneToMany(mappedBy = "usuario")
+    private List<Tarea> tareas;
+
+    public Usuario(Long id, String nombre, String email, String pass) {
+    }
 }

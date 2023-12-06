@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,7 +24,7 @@ public class Tarea implements Serializable{
     private String nombre;
 
     @Column(name = "fecha_inicio")
-    private Date fecha_inicio;
+    private Date fechaInicio;
 
     @Column(name = "prioridad")
     private String prioridad;
@@ -37,7 +38,13 @@ public class Tarea implements Serializable{
     @Column(name = "completada")
     private boolean completada;
 
-    @Column(name = "id_usuario")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
+    @OneToMany(mappedBy = "tarea")
+    private List<SubTarea> subTareas;
+
+    public Tarea(Long id, String nombre, Date fechaInicio, String prioridad, String ubicacion, String descripcion, boolean completada, Usuario usuario) {
+    }
 }

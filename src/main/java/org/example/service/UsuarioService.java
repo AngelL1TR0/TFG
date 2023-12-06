@@ -6,8 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.logging.Logger;
+
 @Service
 public class UsuarioService {
+
+    Logger logger = Logger.getLogger(getClass().getName());
 
     @Autowired
     private UsuarioDAO usuarioDAO;
@@ -15,38 +21,44 @@ public class UsuarioService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void registrarUsuario(Usuario usuario) {
-        String contrasenaEncriptada = passwordEncoder.encode(usuario.getContraseña());
-        usuario.setContraseña(contrasenaEncriptada);
+    public boolean checkPassword(String username, String inputPassword) {
+        Usuario usuario = usuarioDAO.findByNombre(username);
 
+        if (usuario != null) {
+            String savedPassword = usuario.getPass();
+            logger.info("Password saved: " + savedPassword);
+
+            if (passwordEncoder.matches(inputPassword, savedPassword)) {
+                logger.info("Password match");
+                return true;
+            }
+        }
+        logger.info("Password does not match");
+        return false;
+    }
+
+    public Optional<Usuario> getById(Long id) {
+        logger.info("Getting user by id: " + id);
+        return usuarioDAO.findById(Math.toIntExact(id));
+    }
+
+    public List<Usuario> getAll() {
+        logger.info("Getting all users");
+        return usuarioDAO.findAll();
+    }
+
+    public void addUsuario(Usuario usuario) {
+        logger.info("Adding user: " + usuario);
         usuarioDAO.save(usuario);
     }
 
-    public boolean existeUsuario(String nombreUsuario) {
-        // Utiliza el DAO para buscar un usuario por nombre de usuario
-        Usuario usuario = usuarioDAO.findByNombre(nombreUsuario);
-
-        // Si se encuentra un usuario con el nombre de usuario proporcionado, significa que ya existe
-        return usuario != null;
+    public void updateUsuario(Usuario usuario) {
+        logger.info("Updating user: " + usuario);
+        usuarioDAO.save(usuario);
     }
 
-    public boolean existeEmailUsuario(String email) {
-        Usuario usuario = usuarioDAO.findByEmail(email);
-        return usuario != null;
-    }
-
-    public boolean autenticarUsuario(String nombreUsuario, String contrasena) {
-        // Consulta el usuario en la base de datos por nombre de usuario
-        Usuario usuario = usuarioDAO.findByNombre(nombreUsuario);
-
-        if (usuario == null) {
-            return false; // El usuario no existe
-        }
-
-        // Verifica la contraseña almacenada en la base de datos
-        String contrasenaAlmacenada = usuario.getContraseña();
-
-        // Compara la contraseña proporcionada con la almacenada (usando el encoder)
-        return passwordEncoder.matches(contrasena, contrasenaAlmacenada);
+    public void deleteUsuario(Long id) {
+        logger.info("Deleting user by id: " + id);
+        usuarioDAO.deleteById(Math.toIntExact(id));
     }
 }

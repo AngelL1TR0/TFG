@@ -9,6 +9,4 @@ public interface UsuarioDAO extends JpaRepository<Usuario, Integer> {
 
 
     Usuario findByNombre(String nombre);
-
-    Usuario findByEmail(String email);
 }
