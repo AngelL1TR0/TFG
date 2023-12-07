@@ -49,6 +49,7 @@ public class UsuarioService {
 
     public void addUsuario(Usuario usuario) {
         logger.info("Adding user: " + usuario);
+        usuario.setPass(passwordEncoder.encode(usuario.getPass()));
         usuarioDAO.save(usuario);
     }
 

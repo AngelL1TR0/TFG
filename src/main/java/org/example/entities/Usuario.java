@@ -1,10 +1,10 @@
 package org.example.entities;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,5 +33,9 @@ public class Usuario implements Serializable{
     private List<Tarea> tareas;
 
     public Usuario(Long id, String nombre, String email, String pass) {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.pass = pass;
     }
 }
